@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5">
+    <title>GramHealth Med · Join the Network</title>
+    <!-- Font Awesome 6 (free) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+          background: #f6f9fc;
+          color: #1a2b3c;
+          line-height: 1.5;
+        }
+
+        .container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+        }
+
+        /* header / nav */
+        .navbar {
+          background: white;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+          padding: 0.75rem 0;
+          position: sticky;
+          top: 0;
+          z-index: 30;
+          backdrop-filter: blur(4px);
+          background: rgba(255,255,255,0.92);
+        }
+
+        .nav-flex {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .logo {
+          font-weight: 700;
+          font-size: 1.6rem;
+          letter-spacing: -0.5px;
+          color: #0b4d6e;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .logo i {
+          color: #2a9d8f;
+          font-size: 1.8rem;
+        }
+
+        .nav-links {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 1.2rem;
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+
+        .nav-links a {
+          text-decoration: none;
+          color: #1f3a4b;
+          transition: 0.2s;
+        }
+
+        .nav-links a:hover {
+          color: #2a9d8f;
+        }
+
+        .lang-toggle {
+          background: #eef3f7;
+          padding: 0.3rem 0.9rem;
+          border-radius: 40px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          display: flex;
+          gap: 4px;
+          cursor: default;
+        }
+
+        .btn-primary {
+          background: #0b4d6e;
+          color: white;
+          padding: 0.5rem 1.2rem;
+          border-radius: 40px;
+          font-weight: 600;
+          border: none;
+          transition: 0.2s;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-block;
+        }
+
+        .btn-primary:hover {
+          background: #1a6b8a;
+          transform: scale(0.97);
+        }
+
+        .btn-outline {
+          background: transparent;
+          border: 1.5px solid #0b4d6e;
+          color: #0b4d6e;
+          padding: 0.4rem 1.2rem;
+          border-radius: 40px;
+          font-weight: 600;
+          text-decoration: none;
+          display: inline-block;
+        }
+
+        .btn-outline:hover {
+          background: #e2edf5;
+        }
+
+        /* hero */
+        .hero {
+          padding: 2.5rem 0 1.8rem;
+        }
+
+        .hero-grid {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 2rem;
+        }
+
+        .hero-text {
+          flex: 1 1 300px;
+        }
+
+        .hero-text h1 {
+          font-size: 2.6rem;
+          font-weight: 700;
+          line-height: 1.2;
+          color: #0a2a3b;
+          margin-bottom: 1rem;
+        }
+
+        .hero-text p {
+          font-size: 1.1rem;
+          color: #2c4a5e;
+          max-width: 550px;
+          margin-bottom: 1.8rem;
+        }
+
+        .hero-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1.8rem;
+          margin: 1.5rem 0;
+        }
+
+        .badge-item {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-weight: 500;
+        }
+
+        .badge-item i {
+          color: #2a9d8f;
+          font-size: 1.3rem;
+        }
+
+        /* live preview cards */
+        .preview-section {
+          background: white;
+          border-radius: 28px;
+          padding: 1.8rem 1.8rem 1.2rem;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.02);
+          border: 1px solid #e9edf2;
+          margin: 2rem 0 1.5rem;
+        }
+
+        .preview-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          margin-bottom: 1.5rem;
+        }
+
+        .preview-header h3 {
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: #0b3b4f;
+        }
+
+        .preview-header small {
+          color: #5f7a8c;
+          background: #edf4f9;
+          padding: 0.2rem 1rem;
+          border-radius: 30px;
+          font-size: 0.8rem;
+        }
+
+        .card-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+          gap: 1.2rem;
+        }
+
+        .live-card {
+          background: #f9fcff;
+          border-radius: 20px;
+          padding: 1.2rem 1rem;
+          border-left: 5px solid #2a9d8f;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .live-card h4 {
+          font-weight: 600;
+          font-size: 1rem;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          margin-bottom: 0.4rem;
+        }
+
+        .live-card .status {
+          font-size: 0.9rem;
+          font-weight: 500;
+          color: #1f5a6b;
+        }
+
+        .live-card .highlight {
+          color: #0b6b5a;
+          font-weight: 700;
+        }
+
+        .live-card .sub {
+          font-size: 0.8rem;
+          color: #3d5f72;
+          margin-top: 0.3rem;
+        }
+
+        .ambulance-call {
+          background: #e7f1f5;
+          border-radius: 40px;
+          padding: 0.4rem 1rem;
+          display: inline-block;
+          font-weight: 600;
+          font-size: 0.85rem;
+          color: #0b4d6e;
+        }
+
+        .ambulance-call i {
+          margin-right: 6px;
+          color: #c44536;
+        }
+
+        /* mission & what we do */
+        .section-title {
+          font-size: 2rem;
+          font-weight: 700;
+          margin: 2.5rem 0 1rem;
+          color: #0a2a3b;
+        }
+
+        .grid-2col {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 1.8rem;
+          margin: 1.5rem 0;
+        }
+
+        .service-card {
+          background: white;
+          padding: 1.8rem 1.2rem;
+          border-radius: 24px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+          border: 1px solid #e2eaf0;
+        }
+
+        .service-card i {
+          font-size: 2rem;
+          color: #2a9d8f;
+          margin-bottom: 0.8rem;
+        }
+
+        .service-card h4 {
+          font-size: 1.2rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+          color: #2f4b5e;
+          font-size: 0.95rem;
+        }
+
+        /* onboarding partners */
+        .partner-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+          margin: 1.5rem 0;
+        }
+
+        .partner-card {
+          background: white;
+          padding: 1.2rem;
+          border-radius: 20px;
+          border: 1px solid #e2eaf0;
+        }
+
+        .partner-card .badge {
+          background: #d2e9e4;
+          color: #0a5e4e;
+          font-size: 0.7rem;
+          padding: 0.2rem 0.6rem;
+          border-radius: 30px;
+          font-weight: 600;
+        }
+
+        .partner-card h4 {
+          margin: 0.5rem 0 0.2rem;
+        }
+
+        .billing-demo {
+          background: #e6f0f5;
+          border-radius: 24px;
+          padding: 1.8rem;
+          margin: 2rem 0;
+        }
+
+        .billing-row {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.4rem 0;
+          border-bottom: 1px dashed #b8cfdb;
+        }
+
+        .billing-total {
+          font-weight: 700;
+          font-size: 1.2rem;
+          margin-top: 0.6rem;
+        }
+
+        /* footer */
+        .footer {
+          background: #0b2230;
+          color: #dae8f0;
+          padding: 2.5rem 0 1.8rem;
+          margin-top: 3rem;
+          border-radius: 40px 40px 0 0;
+        }
+
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 2rem;
+        }
+
+        .footer a {
+          color: #b4d0dd;
+          text-decoration: none;
+          display: block;
+          margin: 0.3rem 0;
+        }
+
+        .footer a:hover {
+          color: white;
+        }
+
+        .footer small {
+          display: block;
+          margin-top: 2rem;
+          opacity: 0.7;
+          font-size: 0.8rem;
+          border-top: 1px solid #1f4055;
+          padding-top: 1.5rem;
+        }
+
+        .disclosure {
+          background: #112d3b;
+          padding: 1rem 1.5rem;
+          border-radius: 60px;
+          font-size: 0.8rem;
+          color: #bfd7e3;
+          margin: 1.5rem 0 0;
+        }
+
+        /* cosmic cards (only used inside modal now) */
+        .cosmic-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1.5rem;
+        }
+
+        .cosmic-card {
+          background: white;
+          border-radius: 28px;
+          padding: 2rem 1.2rem;
+          text-align: center;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.02);
+          border: 1px solid #e2eaf0;
+          transition: 0.25s ease;
+          text-decoration: none;
+          color: #1a2b3c;
+          display: block;
+        }
+
+        .cosmic-card:hover {
+          transform: translateY(-6px);
+          border-color: #2a9d8f;
+          box-shadow: 0 16px 32px rgba(0,0,0,0.04);
+        }
+
+        .cosmic-card i {
+          font-size: 2.8rem;
+          margin-bottom: 0.6rem;
+        }
+
+        .cosmic-card h4 {
+          font-weight: 600;
+          font-size: 1.4rem;
+          margin-bottom: 0.2rem;
+        }
+
+        .cosmic-card p {
+          color: #2f4b5e;
+          font-size: 0.95rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .badge-cosmic {
+          background: #dceaf2;
+          padding: 0.2rem 1.2rem;
+          border-radius: 40px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #0b4d6e;
+          display: inline-block;
+        }
+
+        /* ===== GET STARTED SECTION ===== */
+        .get-started {
+          background: white;
+          border-radius: 48px;
+          padding: 3rem 2.5rem;
+          box-shadow: 0 20px 60px rgba(0, 20, 30, 0.06);
+          border: 1px solid #e9edf2;
+          margin: 2.5rem 0;
+        }
+
+        .get-started-header {
+          text-align: center;
+          margin-bottom: 2.5rem;
+        }
+
+        .get-started-header h2 {
+          font-size: 2.6rem;
+          font-weight: 700;
+          color: #0a2a3b;
+          letter-spacing: -0.5px;
+          margin-bottom: 0.5rem;
+        }
+
+        .get-started-header h2 i {
+          color: #2a9d8f;
+          margin-right: 10px;
+        }
+
+        .get-started-header p {
+          font-size: 1.15rem;
+          color: #2f4b5e;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        .action-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.8rem;
+          margin-top: 1.5rem;
+        }
+
+        .action-card {
+          background: #f9fcff;
+          border-radius: 28px;
+          padding: 2rem 1.5rem;
+          text-align: center;
+          border: 1px solid #e2eaf0;
+          transition: 0.25s ease;
+          text-decoration: none;
+          color: #1a2b3c;
+          display: block;
+          cursor: pointer;
+        }
+
+        .action-card:hover {
+          transform: translateY(-8px);
+          border-color: #2a9d8f;
+          box-shadow: 0 16px 40px rgba(42, 157, 143, 0.08);
+          background: white;
+        }
+
+        .action-card .icon-wrap {
+          width: 72px;
+          height: 72px;
+          background: #e2f0f5;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1rem;
+          font-size: 2rem;
+          color: #0b4d6e;
+          transition: 0.2s;
+        }
+
+        .action-card:hover .icon-wrap {
+          background: #d2e9e4;
+          color: #0a5e4e;
+        }
+
+        .action-card h4 {
+          font-size: 1.3rem;
+          font-weight: 600;
+          margin-bottom: 0.3rem;
+        }
+
+        .action-card p {
+          color: #3d5f72;
+          font-size: 0.95rem;
+          margin-bottom: 0.6rem;
+        }
+
+        .action-card .action-hint {
+          display: inline-block;
+          background: #eef3f7;
+          padding: 0.2rem 1.2rem;
+          border-radius: 40px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          color: #0b4d6e;
+        }
+
+        .action-card .action-hint i {
+          margin-right: 6px;
+        }
+
+        .action-card.demo .icon-wrap {
+          background: #e8f0fe;
+          color: #1f5a7a;
+        }
+
+        .action-card.demo:hover .icon-wrap {
+          background: #d4e2f5;
+          color: #0b4d6e;
+        }
+
+        /* ===== MODAL / OVERLAY ===== */
+        .modal-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(6px);
+          z-index: 1000;
+          justify-content: center;
+          align-items: center;
+          padding: 1.5rem;
+        }
+
+        .modal-overlay.active {
+          display: flex;
+        }
+
+        .modal-content {
+          background: white;
+          border-radius: 48px;
+          padding: 2.5rem 2rem;
+          max-width: 900px;
+          width: 100%;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 40px 80px rgba(0,0,0,0.2);
+          position: relative;
+          animation: modalFade 0.3s ease;
+        }
+
+        @keyframes modalFade {
+          from { opacity: 0; transform: scale(0.96) translateY(20px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 1.2rem;
+          right: 1.5rem;
+          font-size: 1.8rem;
+          background: none;
+          border: none;
+          color: #4f6f82;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        .modal-close:hover {
+          color: #0b4d6e;
+          transform: rotate(90deg);
+        }
+
+        .modal-title {
+          text-align: center;
+          font-size: 2rem;
+          font-weight: 700;
+          color: #0a2a3b;
+          margin-bottom: 1.5rem;
+        }
+
+        .modal-title i {
+          color: #2a9d8f;
+          margin-right: 10px;
+        }
+
+        .modal-body .cosmic-grid {
+          margin: 0;
+        }
+
+        /* ===== JOIN THE NETWORK SECTION (merged) ===== */
+        .join-network-wrapper {
+          background: #e9f1f7;
+          border-radius: 40px;
+          padding: 2.5rem 2.2rem;
+          margin: 2.5rem 0 1.5rem;
+        }
+
+        .join-network-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+
+        @media (max-width: 780px) {
+          .join-network-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+        }
+
+        .join-card {
+          background: white;
+          border-radius: 28px;
+          padding: 1.8rem 1.5rem 2rem;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+          border: 1px solid #e2eaf0;
+          transition: 0.2s;
+        }
+
+        .join-card:hover {
+          border-color: #b6d0e8;
+          box-shadow: 0 12px 30px rgba(18, 67, 112, 0.06);
+        }
+
+        .join-card .card-badge {
+          display: inline-block;
+          background: #dbeafe;
+          color: #1a5b9c;
+          font-weight: 600;
+          font-size: 0.75rem;
+          padding: 0.3rem 0.9rem;
+          border-radius: 30px;
+          letter-spacing: 0.3px;
+          text-transform: uppercase;
+          margin-bottom: 0.5rem;
+        }
+
+        .join-card h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #0a253b;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .join-card h3 i {
+          color: #2a7de1;
+          font-size: 1.4rem;
+        }
+
+        .join-card .subhead {
+          color: #3b5f7e;
+          font-size: 0.95rem;
+          border-left: 3px solid #2a7de1;
+          padding-left: 0.9rem;
+          margin: 0.5rem 0 1.2rem;
+          line-height: 1.4;
+        }
+
+        .join-feature-list {
+          list-style: none;
+          margin: 1rem 0 1.5rem;
+        }
+
+        .join-feature-list li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #eef4fa;
+          font-size: 0.95rem;
+          color: #1b3b58;
+        }
+
+        .join-feature-list li:last-child {
+          border-bottom: none;
+        }
+
+        .join-feature-list i {
+          color: #2a7de1;
+          font-size: 1rem;
+          width: 1.4rem;
+          text-align: center;
+          margin-top: 0.1rem;
+        }
+
+        .join-feature-list .fa-check-circle {
+          color: #0f8b5e;
+        }
+
+        .join-card .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.6rem;
+          background: #f0f7fe;
+          border: 1.5px solid #b8cee6;
+          padding: 0.7rem 1.5rem;
+          border-radius: 60px;
+          font-weight: 600;
+          font-size: 0.95rem;
+          color: #134074;
+          transition: all 0.2s;
+          cursor: default;
+          width: 100%;
+          text-decoration: none;
+        }
+
+        .join-card .btn-primary {
+          background: #1a5f9e;
+          border: 1.5px solid #1a5f9e;
+          color: white;
+          box-shadow: 0 6px 12px rgba(26, 95, 158, 0.12);
+        }
+
+        .join-card .btn-primary i {
+          color: white;
+        }
+
+        .join-card .btn-primary:hover {
+          background: #0e4a7e;
+          border-color: #0e4a7e;
+          transform: scale(1.01);
+        }
+
+        .verified-badge {
+          background: #e3f0e3;
+          color: #0b6e4b;
+          padding: 0.2rem 1rem;
+          border-radius: 40px;
+          font-size: 0.7rem;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.3rem;
+        }
+
+        .verified-badge i {
+          color: #0f8b5e;
+        }
+
+        .hospital-highlight {
+          background: #eaf3fd;
+          border-radius: 1.2rem;
+          padding: 0.5rem 1.2rem;
+          font-size: 0.9rem;
+          color: #1d4b74;
+          display: inline-block;
+          margin: 0.2rem 0 0.8rem;
+          font-weight: 500;
+        }
+
+        .hospital-highlight i {
+          margin-right: 0.4rem;
+          color: #1f6eb0;
+        }
+
+        .small-note {
+          font-size: 0.85rem;
+          color: #446f94;
+          margin: 1rem 0 0.2rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .small-note i {
+          color: #2a7de1;
+        }
+
+        /* ===== join network footer line ===== */
+        .join-footer-line {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem;
+          color: #2a5279;
+          font-weight: 450;
+          padding-top: 1rem;
+          border-top: 1px solid #d6e4f0;
+          margin-top: 1.2rem;
+        }
+
+        .join-footer-line i {
+          color: #2a7de1;
+          margin-right: 0.3rem;
+        }
+
+        .pill-group {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.6rem;
+        }
+
+        .pill {
+          background: #e5f0fa;
+          padding: 0.3rem 1rem;
+          border-radius: 40px;
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #1c4a70;
+        }
+
+        .pill i {
+          color: #1a5f9e;
+          margin-right: 0.3rem;
+        }
+
+        @media (max-width: 600px) {
+          .hero-text h1 { font-size: 2rem; }
+          .nav-flex { flex-direction: column; align-items: stretch; }
+          .nav-links { justify-content: center; }
+          .get-started {
+            padding: 2rem 1.2rem;
+            border-radius: 32px;
+          }
+          .get-started-header h2 {
+            font-size: 2rem;
+          }
+          .action-grid {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+          }
+          .modal-content {
+            padding: 1.8rem 1.2rem;
+          }
+          .cosmic-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+          .join-network-wrapper {
+            padding: 1.8rem 1rem;
+          }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<div class="navbar">
+    <div class="container nav-flex">
+        <div class="logo"><i class="fas fa-heartbeat"></i> GramHealth Demo</div>
+        <div class="nav-links">
+            <a href="#">Services</a>
+            <a href="#">How it Works</a>
+            <a href="#">Hospitals</a>
+            <a href="#">For Doctors</a>
+            <a href="#">For Pharmacy</a>
+            <span class="lang-toggle"><i class="fas fa-globe"></i> EN / हिं</span>
+            <a href="#" class="btn-primary">Book Consultation</a>
+        </div>
+    </div>
+</div>
+
+<!-- Hero -->
+<div class="container hero">
+    <div class="hero-grid">
+        <div class="hero-text">
+            <h1>India's Hyper-Local Health Network</h1>
+            <p>Book doctors, track hospital beds and get medicines — without the runaround.</p>
+            <div class="hero-badges">
+                <span class="badge-item"><i class="fas fa-check-circle"></i> 2 Onboarded Hospitals</span>
+                <span class="badge-item"><i class="fas fa-file-invoice"></i> 100% Transparent Billing</span>
+                <span class="badge-item"><i class="fas fa-clock"></i> 24×7 Emergency Coordination</span>
+            </div>
+            <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                <a href="#" class="btn-primary">Find a Doctor Near You</a>
+                <a href="#" class="btn-outline">Onboard Your Hospital</a>
+            </div>
+            <div style="margin-top: 1.2rem; display: flex; gap: 1.8rem; flex-wrap: wrap; font-size: 0.9rem; color: #1f4b60;">
+                <span><i class="fas fa-user-md"></i> Verified Doctors Live</span>
+                <span><i class="fas fa-prescription"></i> Prescription Delivery: Digital, Instant</span>
+            </div>
+        </div>
+        <div style="flex: 1; min-width: 200px; background: #d7e6ef; border-radius: 40px; padding: 0.8rem 1.2rem; text-align: center;">
+            <i class="fas fa-ambulance" style="font-size: 2.5rem; color: #0b4d6e;"></i>
+            <p style="font-weight: 600; margin: 0.2rem 0;">Ambulance Dispatch</p>
+            <span class="ambulance-call"><i class="fas fa-phone-alt"></i> Proximity Based · ETA ~8 min</span>
+        </div>
+    </div>
+</div>
+
+<!-- LIVE PREVIEW -->
+<div class="container preview-section">
+    <div class="preview-header">
+        <h3><i class="fas fa-satellite-dish" style="color:#2a9d8f;"></i> Live Preview · Gabhana, Aligarh</h3>
+        <small><i class="fas fa-sync-alt fa-spin"></i> updated real-time</small>
+    </div>
+    <div class="card-grid">
+        <div class="live-card">
+            <h4><i class="fas fa-hospital"></i> Malkhan Singh Gov Hospital</h4>
+            <div class="status"><i class="fas fa-bed"></i> ICU Beds: <span class="highlight">03 Available</span></div>
+            <div class="status"><i class="fas fa-wind"></i> Oxygen Units: <span class="highlight">08 Available</span></div>
+            <div class="sub"><i class="fas fa-clock"></i> OPD Token Wait ~12 min</div>
+        </div>
+        <div class="live-card">
+            <h4><i class="fas fa-university"></i> Gov Medical College & Hospital</h4>
+            <div class="status"><i class="fas fa-bed"></i> ICU Beds: <span class="highlight">06 Available</span></div>
+            <div class="status"><i class="fas fa-wind"></i> Oxygen Units: <span class="highlight">14 Available</span></div>
+            <div class="sub"><i class="fas fa-user-md"></i> Emergency: 24x7</div>
+        </div>
+        <div class="live-card">
+            <h4><i class="fas fa-graduation-cap"></i> JD College & Hospital</h4>
+            <div class="status"><i class="fas fa-bed"></i> ICU Beds: <span class="highlight">02 Available</span></div>
+            <div class="status"><i class="fas fa-wind"></i> Oxygen Units: <span class="highlight">05 Available</span></div>
+            <div class="sub"><i class="fas fa-ambulance"></i> Ambulance on standby</div>
+        </div>
+        <div class="live-card" style="border-left-color: #c44536;">
+            <h4><i class="fas fa-ambulance"></i> Ambulance Fleet · Gabhana</h4>
+            <div class="status"><i class="fas fa-map-pin"></i> Nearest ETA: <span class="highlight">~8 min</span></div>
+            <div class="status"><i class="fas fa-phone-alt"></i> Ambulance Call: <span class="highlight">+91-9060153184</span></div>
+            <div class="sub"><i class="fas fa-check-circle" style="color:#2a9d8f;"></i> ALS & Basic response ready</div>
+        </div>
+    </div>
+    <p style="font-size:0.8rem; color:#3d677b; margin-top:1.2rem; border-top:1px solid #e2eaf0; padding-top:0.8rem;">
+        <i class="fas fa-info-circle"></i> Sample preview data shown for illustration. Live figures activate once a hospital's system is connected.
+    </p>
+</div>
+
+<!-- Mission -->
+<div class="container">
+    <h2 class="section-title">Our Mission</h2>
+    <p style="font-size:1.15rem; max-width:700px; color: #1f4357;">Healthcare that doesn't make you wait, guess, or overpay.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:1rem; margin:1rem 0 2rem;">
+        <span style="background:#dceaf2; padding:0.2rem 1.2rem; border-radius:30px;">Hassle-free appointment</span>
+        <span style="background:#dceaf2; padding:0.2rem 1.2rem; border-radius:30px;">Digital prescriptions</span>
+        <span style="background:#dceaf2; padding:0.2rem 1.2rem; border-radius:30px;">Pharmacy integration</span>
+        <span style="background:#dceaf2; padding:0.2rem 1.2rem; border-radius:30px;">Transparent billing</span>
+    </div>
+</div>
+
+<!-- What we do -->
+<div class="container">
+    <h2 class="section-title">What We Do</h2>
+    <div class="grid-2col">
+        <div class="service-card"><i class="fas fa-stethoscope"></i><h4>Doctor Consultations</h4><p>Book OPD tokens & encrypted consultations with verified doctors near you.</p></div>
+        <div class="service-card"><i class="fas fa-bed"></i><h4>Hospital Bed Tracking</h4><p>Check ICU, general ward and oxygen-unit availability across partner hospitals.</p></div>
+        <div class="service-card"><i class="fas fa-vial"></i><h4>Home Sample Collection</h4><p>Accredited lab technicians collect samples at home, deliver digital reports.</p></div>
+        <div class="service-card"><i class="fas fa-ambulance"></i><h4>Emergency Fleet Logistics</h4><p>Nearest-available ambulance dispatch — ALS or basic response to your location.</p></div>
+        <div class="service-card"><i class="fas fa-pills"></i><h4>Pharmacy Delivery</h4><p>Upload prescriptions, get medicines from licensed local pharmacies via courier.</p></div>
+        <div class="service-card"><i class="fas fa-lock"></i><h4>Secure Care Chat</h4><p>Encrypted messaging for follow-ups, symptom logging & long-term records.</p></div>
+    </div>
+</div>
+
+<!-- Onboarded Partners -->
+<div class="container">
+    <h2 class="section-title">Onboarded Partners · Gabhana, Aligarh</h2>
+    <div class="partner-grid">
+        <div class="partner-card"><span class="badge">Verified Partner</span><h4>Malkhan Singh Gov Hospital</h4><p>Multi-speciality & ICU</p><div><i class="fas fa-bed"></i> 03 ICU · 08 O₂</div></div>
+        <div class="partner-card"><span class="badge">Verified Partner</span><h4>Gov Medical College & Hospital</h4><p>Teaching & tertiary care</p><div><i class="fas fa-bed"></i> 06 ICU · 14 O₂</div></div>
+        <div class="partner-card"><span class="badge">Verified Partner</span><h4>JD College & Hospital</h4><p>General & emergency</p><div><i class="fas fa-bed"></i> 02 ICU · 05 O₂</div></div>
+        <div class="partner-card"><span class="badge">Onboarding</span><h4>BSM Nirmaya Hospital</h4><p>04 ICU · 12 O₂ (legacy)</p><div><i class="fas fa-clock"></i> integration live</div></div>
+    </div>
+</div>
+
+<!-- Billing transparency -->
+<div class="container billing-demo">
+    <h3 style="display:flex; gap:8px;"><i class="fas fa-receipt" style="color:#0b4d6e;"></i> Zero Hidden Charges</h3>
+    <p>Every rupee, itemised and visible. No surprise charges at discharge.</p>
+    <div style="max-width:400px;">
+        <div class="billing-row"><span>Doctor Consultation</span><span>₹400</span></div>
+        <div class="billing-row"><span>Diagnostic Panel</span><span>₹650</span></div>
+        <div class="billing-row"><span>Pharmacy (Digital Rx)</span><span>₹280</span></div>
+        <div class="billing-row"><span>Platform Facilitation Fee</span><span>₹50</span></div>
+        <div class="billing-total">Total, Shown Before Payment  ₹1,380</div>
+    </div>
+</div>
+
+<!-- ========== GET STARTED SECTION ========== -->
+<div class="container">
+    <section class="get-started">
+        <div class="get-started-header">
+            <h2><i class="fas fa-rocket"></i> Get Started</h2>
+            <p>Ready when you are. Reach our team for appointments, hospital onboarding, or partnership queries.</p>
+        </div>
+
+        <div class="action-grid">
+            <a href="mailto:hms2110@gmail.com" class="action-card">
+                <div class="icon-wrap"><i class="fas fa-envelope"></i></div>
+                <h4>Email Us</h4>
+                <p>Drop us a line and we'll get back within 24h.</p>
+                <span class="action-hint"><i class="far fa-paper-plane"></i> hms2110@gmail.com</span>
+            </a>
+
+            <a href="tel:+916397807970" class="action-card">
+                <div class="icon-wrap"><i class="fas fa-phone-alt"></i></div>
+                <h4>Call Helpline</h4>
+                <p>Speak directly to our care coordination team.</p>
+                <span class="action-hint"><i class="fas fa-phone"></i> +91-6397807970</span>
+            </a>
+
+            <div class="action-card demo" onclick="openDemoModal()">
+                <div class="icon-wrap"><i class="fas fa-mobile-alt"></i></div>
+                <h4>Demo App</h4>
+                <p>Explore the platform — book, track, and manage.</p>
+                <span class="action-hint"><i class="fas fa-play-circle"></i> Launch demo</span>
+            </div>
+        </div>
+
+        <p style="text-align:center; margin-top: 2rem; font-size:0.9rem; color:#4f6f82; border-top:1px solid #e9edf2; padding-top:1.5rem;">
+            <i class="fas fa-clock" style="color:#2a9d8f;"></i> We respond to all queries within 24 hours · emergency support available 24×7
+        </p>
+    </section>
+</div>
+
+<!-- ====================== JOIN THE NETWORK (MERGED) ====================== -->
+<div class="container join-network-wrapper">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 1.8rem;">
+        <h2 style="font-size: 2rem; font-weight: 700; color: #0a2a3b;"><i class="fas fa-heartbeat" style="color:#2a9d8f;"></i> Join the Network</h2>
+        <span style="background: #dceaf2; padding: 0.4rem 1.4rem; border-radius: 40px; font-weight: 500; color: #1a4e7a;">
+      <i class="fas fa-bolt" style="color:#2a7de1;"></i> Built for the people who deliver care
+    </span>
+    </div>
+
+    <div class="join-network-grid">
+        <!-- FOR INDEPENDENT DOCTORS -->
+        <div class="join-card">
+            <div class="card-badge"><i class="fas fa-user-md"></i> Independent</div>
+            <h3><i class="fas fa-stethoscope"></i> For Doctors</h3>
+            <div class="subhead">
+                Fill your OPD schedule, manage tokens digitally, and issue prescriptions patients can trust.
+            </div>
+            <ul class="join-feature-list">
+                <li><i class="fas fa-check-circle"></i> <strong>Verified profile &amp; credentials</strong> <span class="verified-badge" style="margin-left: auto;"><i class="fas fa-check"></i> badge</span></li>
+                <li><i class="fas fa-prescription-bottle"></i> Digital prescription pad</li>
+                <li><i class="fas fa-comment-dots"></i> Direct patient chat follow-ups</li>
+            </ul>
+            <a href="#" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register as a Doctor</a>
+            <div class="small-note">
+                <i class="fas fa-shield-alt"></i> Trusted by 500+ independent practitioners
+            </div>
+        </div>
+
+        <!-- FOR HOSPITALS & NURSING HOMES -->
+        <div class="join-card">
+            <div class="card-badge"><i class="fas fa-hospital"></i> Institution</div>
+            <h3><i class="fas fa-building"></i> For Hospitals &amp; Nursing Homes</h3>
+            <div class="subhead">
+                Join hospitals like <strong>Malkhan singh gov Hospital</strong> and <strong>gupta Nursing Home</strong> already live on InstaQuickMed.
+            </div>
+            <ul class="join-feature-list">
+                <li><i class="fas fa-bed"></i> Live bed &amp; ward status dashboard</li>
+                <li><i class="fas fa-ticket-alt"></i> Automated OPD token management</li>
+                <li><i class="fas fa-file-invoice-dollar"></i> Transparent, itemised billing tools</li>
+            </ul>
+            <div class="hospital-highlight">
+                <i class="fas fa-check-circle" style="color:#0f8b5e;"></i> Malkhan Singh gov hospital · gupta Nursing Home · +12 more
+            </div>
+            <a href="#" class="btn btn-primary"><i class="fas fa-hotel"></i> Onboard Your Hospital</a>
+            <div class="small-note">
+                <i class="fas fa-arrow-right"></i> Free demo &amp; 30‑day setup support
+            </div>
+        </div>
+    </div>
+
+    <!-- extra trust / network line -->
+    <div class="join-footer-line">
+        <span><i class="fas fa-check-circle" style="color:#0f8b5e;"></i> Verified providers · 2000+ happy patients</span>
+        <div class="pill-group">
+            <span class="pill"><i class="fas fa-tachometer-alt"></i> Live OPD</span>
+            <span class="pill"><i class="fas fa-robot"></i> AI-assisted</span>
+            <span class="pill"><i class="fas fa-lock"></i> HIPAA ready</span>
+        </div>
+    </div>
+    <div style="margin-top: 1.2rem; font-size: 0.85rem; color: #3e6b91; display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; border-top: 1px dashed #d6e4f0; padding-top: 1rem;">
+        <i class="fas fa-heart" style="color: #c93a3a;"></i>
+        <span>InstaQuickMed · built for the people who deliver care</span>
+        <span style="margin-left: auto; display: flex; gap: 1rem;">
+      <i class="fas fa-phone-alt"></i> 24/7 support
+    </span>
+    </div>
+</div>
+
+<!-- ========== MODAL (Demo App with cosmic cards) ========== -->
+<div class="modal-overlay" id="demoModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeDemoModal()">&times;</button>
+        <div class="modal-title"><i class="fas fa-rocket"></i> Demo App · Explore</div>
+        <div class="modal-body">
+            <div class="cosmic-grid">
+                <a th:href="@{/patient}" href="/patient" class="cosmic-card">
+                    <i class="fa-solid fa-user-astronaut" style="color: #4d8fc5;"></i>
+                    <h4 style="color: #1f5a7a;">Patients</h4>
+                    <p>interstellar records</p>
+                    <span class="badge-cosmic"><i class="fa-regular fa-star"></i> +12 new</span>
+                </a>
+                <a th:href="@{/doctor}" href="/doctor" class="cosmic-card">
+                    <i class="fa-solid fa-user-md" style="color: #3b9e6d;"></i>
+                    <h4 style="color: #1f6a4a;">Doctors</h4>
+                    <p>specialists of the nebula</p>
+                    <span class="badge-cosmic"><i class="fa-regular fa-gem"></i> 8 depts</span>
+                </a>
+                <a th:href="@{/appointment}" href="/appointment" class="cosmic-card">
+                    <i class="fa-solid fa-calendar-check" style="color: #c9a23d;"></i>
+                    <h4 style="color: #8a6d1f;">Appointments</h4>
+                    <p>book space-time slot</p>
+                    <span class="badge-cosmic"><i class="fa-regular fa-clock"></i> pending 3</span>
+                </a>
+                <a th:href="@{/bill}" href="/bill" class="cosmic-card">
+                    <i class="fa-solid fa-file-invoice-dollar" style="color: #b05a5a;"></i>
+                    <h4 style="color: #7a3e3e;">Billing</h4>
+                    <p>intergalactic payments</p>
+                    <span class="badge-cosmic"><i class="fa-regular fa-credit-card"></i> due 5</span>
+                </a>
+            </div>
+            <p style="text-align:center; margin-top:1.5rem; color:#4f6f82; font-size:0.9rem;">
+                <i class="fas fa-info-circle"></i> This is a demo preview of the main dashboard cards.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <h4 style="color:white;">InstaQuickMed</h4>
+                <p style="font-size:0.9rem;">An integrated hyper-local digital health infrastructure asset, architected under software governance of CodeToDream.</p>
+                <p style="margin-top:0.8rem;"><i class="fas fa-user"></i> Founder & CEO — Chaman Kumar</p>
+                <p><i class="fas fa-user-md"></i> Managing Director & CEO — Chaman Kumar</p>
+                <p><i class="fas fa-map-marker-alt"></i> Gabhana, Aligarh, 202136</p>
+            </div>
+            <div>
+                <h4 style="color:white;">Contact</h4>
+                <a href="mailto:hms2110@gmail.com">hms2110@gmail.com</a>
+                <a href="tel:+916397807970">+91-6397807970</a>
+                <a href="#"> 0571-2700935 (helpline)</a>
+            </div>
+            <div>
+                <h4 style="color:white;">Quick Links</h4>
+                <a href="#">Services</a>
+                <a href="#">Partner Hospitals</a>
+                <a href="#">Doctor Registration</a>
+            </div>
+        </div>
+        <div class="disclosure">
+            <i class="fas fa-shield-alt"></i> Mandatory Regulatory Disclosure: InstaQuickMed functions exclusively as a digital marketplace, matching system and technology integration platform. It does not hold medical licences to independently diagnose, prescribe or manage clinical operations. In an absolute, acute emergency, please contact local emergency medical services directly without delay.
+        </div>
+        <small>© 2026 InstaQuickMed. All rights reserved. Built & optimised by CodeToDream Engineering.</small>
+    </div>
+</div>
+
+<script>
+    // Modal controls
+    function openDemoModal() {
+      document.getElementById('demoModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDemoModal() {
+      document.getElementById('demoModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('demoModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeDemoModal();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeDemoModal();
+      }
+    });
+</script>
+
+</body>
+</html>

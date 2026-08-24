@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Manager · ✨ update patient</title>
+
+    <!-- Bootstrap 4 + Font Awesome 5 for lively icons & extra flair -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Google Fonts: Poppins for a modern friendly look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 🌈 complete makeover: colourful, attractive, vibrant, modern */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 50%, #fdeaa8 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* animated floating shapes for extra design (colourful) */
+        .floating-shape {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff9a9e, #fad0c4);
+            opacity: 0.3;
+            filter: blur(40px);
+            z-index: 0;
+            animation: float 15s infinite alternate ease-in-out;
+        }
+        .shape1 { top: -50px; left: -50px; background: #ffb3c6; width: 400px; height: 400px; }
+        .shape2 { bottom: 0; right: 0; width: 500px; height: 500px; background: #b4d9f0; opacity: 0.25; animation-duration: 20s; }
+        .shape3 { top: 40%; left: 20%; width: 250px; height: 250px; background: #fdeaa8; opacity: 0.3; filter: blur(50px); }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 30px) scale(1.1); }
+        }
+
+        /* reimagined navbar – vivid gradient, playful shadow */
+        .vivid-navbar {
+            background: linear-gradient(45deg, #ee9ca7, #ffd194, #9ad0c2, #6a4b93);
+            background-size: 300% 300%;
+            animation: gradientFlow 8s infinite;
+            box-shadow: 0 15px 30px rgba(247, 120, 160, 0.4), 0 0 0 2px #fff4e6;
+            padding: 0.8rem 1.8rem;
+            z-index: 100;
+            border-bottom: 3px solid white;
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 2rem;
+            color: #1f2b45 !important;
+            text-shadow: 2px 2px 0 #fbc1c1, 4px 4px 0 rgba(255,255,200,0.7);
+            letter-spacing: 1px;
+        }
+        .navbar-brand i {
+            color: #fffacd;
+            filter: drop-shadow(0 0 8px #ff69b4);
+            margin-right: 10px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #16213e !important;
+            background: rgba(255,255,245,0.6);
+            border-radius: 40px;
+            margin-left: 15px;
+            padding: 8px 24px !important;
+            backdrop-filter: blur(4px);
+            border: 2px solid white;
+            transition: 0.3s;
+        }
+        .nav-link:hover {
+            background: white;
+            color: #c44569 !important;
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 15px #ff9ebb;
+        }
+
+        /* main container: z-index to stay above shapes */
+        .container {
+            position: relative;
+            z-index: 10;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* CARD — completely redesigned: from dark to vibrant glassmorphism + pastel colours */
+        .colorful-card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 50px 50px 30px 50px;
+            box-shadow: 0 35px 60px rgba(247, 120, 160, 0.5), 0 0 0 4px #fffcf0, inset 0 2px 15px rgba(255,255,255,0.8);
+            border: 2px solid rgba(255,245,210,0.9);
+            transition: transform 0.3s;
+            padding: 2rem 1.5rem;
+        }
+        .colorful-card:hover {
+            transform: scale(1.01);
+        }
+
+        /* neon-title becomes a vibrant gradient (➕ update patient) */
+        .neon-title-vibrant {
+            font-weight: 800;
+            font-size: 2.5rem;
+            background: linear-gradient(145deg, #d53369, #daae51, #2376b7, #55c1a5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 0 #fdeaa8, 5px 5px 0 rgba(255,182,193,0.6);
+            margin-bottom: 1.2rem;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* form labels with colourful background + icons */
+        .form-group label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            background: linear-gradient(120deg, #fed9b7, #b5e6e6);
+            padding: 0.4rem 1.8rem 0.4rem 1.8rem;
+            border-radius: 40px;
+            color: #0d2b4e;
+            margin-bottom: 0.5rem;
+            border-left: 8px solid #fc7b7b;
+            box-shadow: 0 6px 0 #c9c9ff;
+            display: inline-block;
+            border-right: 3px solid white;
+        }
+        .form-group label i {
+            color: #bb4f75;
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+
+        /* form fields – bright, attractive, with playful focus */
+        .form-control {
+            background: #fff5e6;
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #ffb6c1, #b0e0e6, #f4c542, #b19cd9) 1;
+            border-radius: 30px;
+            padding: 0.9rem 1.8rem;
+            font-size: 1.1rem;
+            color: #16213e;
+            font-weight: 500;
+            box-shadow: inset 0 4px 8px rgba(255, 192, 203, 0.4), 0 6px 14px rgba(255,215,0,0.3);
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            background: #fff9f0;
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 5px rgba(255, 105, 180, 0.3), 0 10px 20px rgb(255, 200, 200);
+            outline: none;
+            transform: translateY(-3px);
+        }
+
+        /* select arrow custom style */
+        select.form-control {
+            background: #fff5e6 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23d63384'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1.2rem center;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        /* textarea same radius */
+        textarea.form-control {
+            border-radius: 30px;
+        }
+
+        /* super colourful submit button (update) */
+        .btn-sizzle {
+            background: linear-gradient(45deg, #fb8da0, #ffd166, #8ecae6, #b983ff);
+            background-size: 300% 300%;
+            border: none;
+            border-radius: 60px;
+            padding: 1.2rem 2rem;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #1d3557;
+            text-shadow: 2px 2px 0 #fff7b0;
+            box-shadow: 0 20px 30px #c45a8a, 0 0 0 4px #ffffff;
+            transition: 0.4s;
+            width: 100%;
+            letter-spacing: 2px;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-sizzle i {
+            font-size: 2.2rem;
+            color: #2e1b4b;
+            filter: drop-shadow(0 0 4px gold);
+        }
+
+        .btn-sizzle:hover {
+            background-position: 100% 0;
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 28px 38px #ba2d7e, 0 0 0 6px #fff9d7;
+            color: #03045e;
+            cursor: pointer;
+        }
+
+        /* additional small decorative elements */
+        .input-group-emoji {
+            position: absolute;
+            right: 20px;
+            top: 45px;
+            font-size: 1.8rem;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* for extra cuteness */
+        .attractive-note {
+            text-align: center;
+            margin-top: 20px;
+            background: rgba(255, 255, 220, 0.8);
+            border-radius: 60px;
+            padding: 12px;
+            font-weight: 600;
+            color: #6a1b4b;
+            backdrop-filter: blur(4px);
+            border: 2px solid #ffe69b;
+        }
+
+        /* row & column adjustments */
+        .row.justify-content-center {
+            margin-top: 2rem;
+        }
+
+        /* remove any dark leftovers */
+        .dark-navbar, .dark-card, .bg-dark {
+            background: transparent !important; /* overwrite any dark styles, we use vivid-navbar */
+        }
+        /* override default bootstrap dark bg */
+        .bg-dark {
+            background: transparent !important;
+        }
+        /* but we keep the new navbar */
+    </style>
+</head>
+<body>
+
+<!-- colourful floating backgrounds -->
+<div class="floating-shape shape1"></div>
+<div class="floating-shape shape2"></div>
+<div class="floating-shape shape3"></div>
+
+<!-- NAVBAR - fully redesigned, colourful, with icons -->
+<nav class="navbar navbar-expand-md vivid-navbar">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-hospital-user fa-spin" style="--fa-spin-duration: 10s;"></i>
+        Hos·pi·Care <span style="color: #ffecaa;">✨</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/patient}">
+                    <i class="fas fa-notes-medical"></i> Patient Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-calendar-check"></i> Dashboard
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<br>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <!-- 🌟 colourful card replacing old dark-card -->
+            <div class="colorful-card">
+
+                <!-- dynamic title with plus and update text (vibrant) -->
+                <h2 class="neon-title-vibrant">
+                    <i class="fas fa-pen-fancy" style="color:#fc9e9e;"></i>  Update Patient  <i class="fas fa-heartbeat" style="color:#ff7b89;"></i>
+                </h2>
+
+                <!-- Thymeleaf form with all fields, now extra colourful -->
+                <form th:action="@{/patient}" th:object="${Patient}" method="post">
+
+                    <!-- patient name with icon + emoji -->
+                    <div class="form-group">
+                        <label><i class="fas fa-user-md"></i> Patient Name</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Ella Fitzgerald" />
+                        <div class="input-group-emoji">👤</div>
+                    </div>
+
+                    <!-- gender select -->
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Gender</label>
+                        <select th:field="*{gender}" class="form-control">
+                            <option value="" disabled>🌈 select gender</option>
+                            <option value="Male">♂️ Male</option>
+                            <option value="Female">♀️ Female</option>
+                            <option value="Other">⚧️ Other / non-binary</option>
+                        </select>
+                    </div>
+
+                    <!-- age number -->
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Age (years)</label>
+                        <input type="number" th:field="*{age}" class="form-control" min="0" max="150" placeholder="29" />
+                    </div>
+
+                    <!-- disease textarea -->
+                    <div class="form-group">
+                        <label><i class="fas fa-disease"></i> Disease / symptoms</label>
+                        <textarea th:field="*{disease}" class="form-control" rows="3" placeholder="Describe symptoms ..."></textarea>
+                    </div>
+
+                    <!-- contact number -->
+                    <div class="form-group">
+                        <label><i class="fas fa-phone-alt"></i> Contact Number</label>
+                        <input type="tel" th:field="*{contact}" class="form-control" placeholder="+1 (555) 123-4567" />
+                    </div>
+
+                    <!-- big juicy submit button (update) -->
+                    <button type="submit" class="btn-sizzle">
+                        <i class="fas fa-cloud-upload-alt"></i>  Update Record  <i class="fas fa-check-circle"></i>
+                    </button>
+
+                    <!-- subtle attractive note -->
+                    <div class="attractive-note">
+                        <i class="fas fa-shield-heart"></i>  information is safe & colourful  <i class="fas fa-shield-heart"></i>
+                    </div>
+                </form>
+                <!-- end th form -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- optional footer with love (colourful) -->
+<div style="text-align: center; margin: 30px 0 10px; color: #460a40; font-weight: 600; background: rgba(255, 240, 200, 0.7); backdrop-filter: blur(4px); padding: 12px; border-radius: 100px; width: fit-content; margin-left: auto; margin-right: auto; border: 3px solid white;">
+    <i class="fas fa-stethoscope"></i>  made with 🌈 for better care  <i class="fas fa-kit-medical"></i>
+</div>
+
+<!-- Bootstrap JS (for toggler etc, not required for design) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

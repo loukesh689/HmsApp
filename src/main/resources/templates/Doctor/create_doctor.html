@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nebula · Add new doctor</title>
+    <!-- Bootstrap 4 + Font Awesome 5 for cosmic icons & liveliness -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Google Fonts: Orbitron for universal feel, plus Poppins as friendly backup -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 🌌✨ universe themed redesign: from dark to cosmic, attractive and deep */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(ellipse at top, #0d0221 0%, #190b2e 40%, #2e1a4a 100%);
+            min-height: 100vh;
+            color: #f0eaff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* starfield animation (universe sparkle) */
+        .stars, .twinkling, .clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .stars {
+            background: #000 url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSI2IiBjeT0iMTQiIHI9IjEiIGZpbGw9IndoaXRlIiAvPjxjaXJjbGUgY3g9IjE2MCIgY3k9IjYwIiByPSIxLjUiIGZpbGw9IndoaXRlIiAvPjxjaXJjbGUgY3g9IjQwIiBjeT0iMjAwIiByPSIxLjIiIGZpbGw9IndoaXRlIiAvPjxjaXJjbGUgY3g9IjI4MCIgY3k9IjE4MCIgcj0iMSIgZmlsbD0id2hpdGUiIC8+PC9zdmc+');
+            background-size: 300px 300px;
+            animation: starPulse 8s infinite alternate;
+        }
+        .twinkling {
+            background: transparent url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjUwIiByPSIyIiBmaWxsPSIjZmZmZmUwIiBvcGFjaXR5PSIwLjgiIC8+PC9zdmc+');
+            background-size: 300px 300px;
+            animation: twinkle 4s infinite;
+        }
+        @keyframes starPulse {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.3; }
+        }
+
+        /* floating planets / orbs (attractive universe accents) */
+        .floating-planet {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fdeaa8, #cb6ce6);
+            filter: blur(60px);
+            opacity: 0.2;
+            z-index: 1;
+            animation: planetMove 25s infinite alternate ease-in-out;
+        }
+        .planet1 {
+            width: 400px; height: 400px; top: -100px; right: -100px;
+            background: radial-gradient(circle, #a97cff, #5d4bff);
+        }
+        .planet2 {
+            width: 550px; height: 550px; bottom: -200px; left: -150px;
+            background: radial-gradient(circle, #ff9a9e, #f093fb);
+            opacity: 0.15;
+            animation-duration: 30s;
+        }
+        .planet3 {
+            width: 200px; height: 200px; top: 30%; left: 10%;
+            background: #ffc3a0;
+            filter: blur(40px);
+            opacity: 0.2;
+        }
+        @keyframes planetMove {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 30px) scale(1.1); }
+        }
+
+        /* navbar : galaxy gradient + shiny */
+        .galaxy-navbar {
+            background: linear-gradient(120deg, #1b0e3b, #2f1b53, #18113c);
+            box-shadow: 0 20px 30px rgba(123, 31, 162, 0.5), 0 0 0 2px #a67cff, 0 0 25px #b794f4;
+            border-bottom: 2px solid #b57bee;
+            padding: 0.9rem 2rem;
+            position: relative;
+            z-index: 20;
+        }
+        .navbar-brand {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 2.1rem;
+            color: #ffffff !important;
+            text-shadow: 0 0 15px #c78aff, 2px 2px 0 #3c1e70, 4px 4px 0 #210b44;
+            letter-spacing: 3px;
+        }
+        .navbar-brand i {
+            color: #ffd966;
+            filter: drop-shadow(0 0 10px gold);
+            margin-right: 12px;
+        }
+
+        /* container & card: cosmic glass */
+        .container {
+            position: relative;
+            z-index: 15;
+        }
+
+        .cosmic-card {
+            background: rgba(18, 8, 32, 0.65);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 70px 70px 40px 70px;
+            box-shadow: 0 40px 70px rgba(128, 0, 255, 0.5), 0 0 0 4px #c48aff, inset 0 0 40px rgba(230, 210, 255, 0.5);
+            border: 2px solid rgba(210, 180, 255, 0.8);
+            padding: 2.3rem 2rem;
+            transition: transform 0.3s;
+            animation: cardGlow 6s infinite alternate;
+        }
+        @keyframes cardGlow {
+            0% { box-shadow: 0 40px 70px #7b2eda, 0 0 0 4px #e3b0ff; }
+            100% { box-shadow: 0 50px 90px #b77cf2, 0 0 0 6px #f0d3ff; }
+        }
+        .cosmic-card:hover {
+            transform: scale(1.02);
+        }
+
+        /* title : supernova style */
+        .supernova-title {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 2.7rem;
+            background: linear-gradient(145deg, #fbadff, #b5b9ff, #a0f0ea, #fbc490);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px #d5aaff, 0 0 70px #9147ff;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .supernova-title i {
+            color: #f9d77e;
+            filter: drop-shadow(0 0 15px gold);
+            margin: 0 5px;
+        }
+
+        /* form labels glowing */
+        .form-group label {
+            font-weight: 600;
+            font-size: 1.25rem;
+            background: rgba(106, 13, 173, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 0.4rem 2rem;
+            border-radius: 40px;
+            color: #ffffff;
+            border-left: 8px solid #ffb3c6;
+            border-right: 3px solid #f5b0ff;
+            box-shadow: 0 0 15px #c47aff, 0 6px 0 #5f2792;
+            margin-bottom: 0.7rem;
+            display: inline-block;
+        }
+        .form-group label i {
+            color: #ffdb8e;
+            margin-right: 12px;
+            font-size: 1.5rem;
+            filter: drop-shadow(0 0 5px #fff);
+        }
+
+        /* input fields – galaxy style */
+        .form-control, select.form-control, input[type="number"] {
+            background: rgba(18, 5, 45, 0.7);
+            border: 3px solid #a16be0;
+            border-radius: 50px;
+            padding: 0.9rem 2rem;
+            font-size: 1.2rem;
+            color: #f2e6ff;
+            font-weight: 500;
+            box-shadow: inset 0 0 25px #2f0f5e, 0 8px 20px rgba(191, 90, 242, 0.6);
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        .form-control:focus, select:focus {
+            background: #1b0d33;
+            border-color: #f2b5ff;
+            box-shadow: 0 0 0 6px rgba(200, 130, 255, 0.5), 0 0 30px #b57aef;
+            transform: translateY(-3px);
+            color: #ffffff;
+        }
+
+        /* select dropdown arrow celestial */
+        select.form-control {
+            background: rgba(18, 5, 45, 0.7) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='%23dab0ff'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1.5rem center;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        /* special fees & number fields */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* stellar submit button */
+        .btn-cosmic {
+            background: linear-gradient(45deg, #a55cf2, #c2589e, #f28c6e, #c558d6);
+            background-size: 300% 300%;
+            border: none;
+            border-radius: 60px;
+            padding: 1.2rem 2rem;
+            font-weight: 800;
+            font-size: 2rem;
+            font-family: 'Orbitron', sans-serif;
+            color: #fef9ff;
+            text-shadow: 0 2px 0 #570f70, 0 0 20px white;
+            box-shadow: 0 25px 35px #7a37b3, 0 0 0 5px #f7d2ff, 0 0 60px #be7af2;
+            transition: 0.4s;
+            width: 100%;
+            letter-spacing: 3px;
+            border: 2px solid #fadcff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 2rem;
+        }
+
+        .btn-cosmic i {
+            font-size: 2.5rem;
+            color: #fff3b7;
+            filter: drop-shadow(0 0 10px gold);
+        }
+
+        .btn-cosmic:hover {
+            background-position: 100% 0;
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 35px 45px #a153d9, 0 0 0 8px #ffe9b0, 0 0 80px #d192ff;
+            color: #fffddf;
+        }
+
+        /* small note with constellations */
+        .constellation-note {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            padding: 12px 25px;
+            border-radius: 60px;
+            border: 2px solid #c58aff;
+            color: #e4ccff;
+        }
+
+        /* fixing missing closing tags etc */
+        .extra-space {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+<!-- universe layers: stars, twinkling, and floating planets -->
+<div class="stars"></div>
+<div class="twinkling"></div>
+<div class="floating-planet planet1"></div>
+<div class="floating-planet planet2"></div>
+<div class="floating-planet planet3"></div>
+
+<!-- navbar with cosmic flavour (dark-navbar replaced) -->
+<nav class="navbar navbar-expand-md galaxy-navbar">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-rocket"></i> STAR·HOSPITAL <i class="fas fa-star"></i>
+    </a>
+    <div class="ml-auto">
+            <span style="color:#dbbaff; font-family: Orbitron; background:#1f1147; padding:0.5rem 2rem; border-radius: 40px; border:2px solid #b77cf2;">
+                <i class="fas fa-user-md"></i>  DOCTOR NEBULA
+            </span>
+    </div>
+</nav>
+
+<br>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <!-- attractive cosmic card (dark-card replaced with universe glass) -->
+            <div class="cosmic-card">
+                <div class="card-body">
+
+                    <!-- supernova title with icon -->
+                    <h2 class="supernova-title">
+                        <i class="fas fa-plus-circle"></i>  ADD NEW DOCTOR  <i class="fas fa-stethoscope"></i>
+                    </h2>
+
+                    <!-- thymeleaf form – object Doctor, method post (all fields redesigned) -->
+                    <form th:action="@{/doctor}" th:object="${Doctor}" method="post">
+
+                        <!-- Doctor name field (cosmic) -->
+                        <div class="form-group">
+                            <label><i class="fas fa-user-astronaut"></i> Doctor Name</label>
+                            <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Dr. Luna Eclipse" />
+                        </div>
+
+                        <!-- Specialization select (with universe icons) -->
+                        <div class="form-group">
+                            <label for="specialization"><i class="fas fa-dna"></i> Specialization</label>
+                            <select th:field="*{specialization}" id="specialization" class="form-control" required>
+                                <option value="" disabled selected>🌙 select specialization</option>
+                                <option value="Cardiology">❤️ Cardiology</option>
+                                <option value="Dermatology">🌟 Dermatology</option>
+                                <option value="Neurology">🧠 Neurology</option>
+                                <option value="Orthopedics">🦴 Orthopedics</option>
+                                <option value="Pediatrics">👶 Pediatrics</option>
+                            </select>
+                        </div>
+
+                        <!-- Consultation Fees with galaxy vibe -->
+                        <div class="form-group">
+                            <label for="fees"><i class="fas fa-coins"></i> Consultation Fees ($)</label>
+                            <input type="number" th:field="*{fees}" id="fees" class="form-control" placeholder="e.g. 250" min="0" step="0.01" required>
+                        </div>
+
+                        <!-- extra div was incorrectly placed, fixed: no unclosed div -->
+                        <!-- stellar submit button -->
+                        <button type="submit" class="btn-cosmic">
+                            <i class="fas fa-cloud-upload-alt"></i>  LAUNCH RECORD  <i class="fas fa-rocket"></i>
+                        </button>
+
+                        <!-- cosmic note -->
+                        <div class="constellation-note">
+                            <i class="fas fa-meteor"></i>  adding doctor to the universe · data is safe among stars  <i class="fas fa-meteor"></i>
+                        </div>
+
+                    </form> <!-- closing form -->
+                </div> <!-- card-body -->
+            </div> <!-- cosmic-card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+</div> <!-- container -->
+
+<!-- tiny footer constellation (extra attraction) -->
+<div style="text-align: center; margin: 30px 0 15px; color: #dbbaff; font-size: 1.2rem; position: relative; z-index: 20;">
+    <i class="fas fa-crown"></i>  celestial care · dr. universe  <i class="fas fa-crown"></i>
+</div>
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

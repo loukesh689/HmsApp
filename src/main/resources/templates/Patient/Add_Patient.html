@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Manager • Add patient</title>
+
+    <!-- Bootstrap 4 + Font Awesome 5 for icons & colourful touch -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* 🌈 colourful, vibrant, designful background & effects */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* glassmorphism + vivid navbar */
+        .vivid-navbar {
+            background: linear-gradient(45deg, #ff6ec4, #7873f5, #3bd1d3);
+            background-size: 200% 200%;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: gradientShift 8s ease infinite;
+            padding: 0.9rem 1.5rem;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #fff !important;
+            text-shadow: 2px 2px 0 #ffb6c1, 4px 4px 0 rgba(0,0,0,0.1);
+            letter-spacing: 1px;
+        }
+        .navbar-brand i {
+            color: #ffe16b;
+            filter: drop-shadow(0 0 5px gold);
+        }
+
+        /* colourful glowing card — not dark, but radiant */
+        .radiant-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px 48px 30px 30px;
+            box-shadow: 0 30px 50px rgba(255, 105, 180, 0.3),
+                        0 0 0 2px rgba(255,255,240,0.8),
+                        inset 0 2px 5px rgba(255,255,255,0.7);
+            padding: 2rem 1.5rem;
+            border: 1px solid rgba(255,255,180,0.6);
+            transition: transform 0.2s ease;
+        }
+        .radiant-card:hover {
+            transform: scale(1.01);
+        }
+
+        /* multi-colour title with playful gradient */
+        .neon-title-colourful {
+            font-weight: 800;
+            font-size: 2.3rem;
+            background: linear-gradient(145deg, #d53369, #daae51, #0077b6, #2a9d8f);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 3px 3px 0 #fdeaa8, 0 0 10px #ffb3c6;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            border-bottom: 5px dotted #ff8c8c;
+            padding-bottom: 8px;
+        }
+
+        /* labels with icon + bright colours */
+        .form-group label {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1f3a5f;
+            background: rgba(255, 245, 200, 0.6);
+            padding: 0.2rem 1rem 0.2rem 1rem;
+            border-radius: 40px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            border-left: 6px solid #ff4d6d;
+            box-shadow: 0 4px 6px #ffd0d0;
+            letter-spacing: 0.5px;
+        }
+        .form-group label i {
+            color: #d62828;
+            margin-right: 8px;
+            font-size: 1.3rem;
+        }
+
+        /* colourful form fields */
+        .form-control {
+            background: #fff0f5;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #f08080, #b0e0e6, #f4c542) 1;
+            border-radius: 30px;
+            padding: 0.9rem 1.5rem;
+            font-size: 1.1rem;
+            color: #2d1b3c;
+            font-weight: 500;
+            box-shadow: inset 0 3px 8px rgba(255, 182, 193, 0.3), 0 5px 12px rgba(255,215,0,0.2);
+            transition: all 0.3s;
+        }
+        .form-control:focus {
+            background: #ffe6f0;
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 5px rgba(255, 105, 180, 0.3), 0 8px 20px rgb(255, 200, 200);
+            outline: none;
+            transform: translateY(-2px);
+        }
+
+        /* select arrow style */
+        select.form-control {
+            background: #fff0f5 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='%23d63384'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1rem center;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        /* textarea */
+        textarea.form-control {
+            border-radius: 30px;
+        }
+
+        /* colourful submit button — animated gradient */
+        .btn-colourful {
+            background: linear-gradient(120deg, #f6d365, #fda085, #f093fb, #a18cd1);
+            background-size: 300% 300%;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #33333355;
+            box-shadow: 0 15px 25px #c06c84, 0 0 0 4px #fff6d0;
+            transition: all 0.4s;
+            width: 100%;
+            letter-spacing: 2px;
+            border: 2px solid white;
+        }
+
+        .btn-colourful:hover {
+            background-position: 100% 0;
+            transform: scale(1.02) translateY(-4px);
+            box-shadow: 0 25px 35px #ba2d7e, 0 0 0 6px #fffbcb;
+            color: #fff3e0;
+            cursor: pointer;
+        }
+
+        .btn-colourful i {
+            font-size: 2rem;
+            vertical-align: middle;
+            margin-right: 10px;
+            color: #ffef9f;
+        }
+
+        /* additional flair: floating emoji decorations */
+        .floating-emoji {
+            position: absolute;
+            font-size: 2.2rem;
+            opacity: 0.4;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* animated background for body with sparkle */
+        .bg-bubble {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(255, 218, 185,0.4) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 70%, rgba(176, 224, 230,0.5) 0%, transparent 40%),
+                        radial-gradient(circle at 30% 80%, #ffe5b4 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- background sparkle layer -->
+<div class="bg-bubble"></div>
+
+<!-- floating colourful emojis for fun (absolutely positioned) -->
+<div class="floating-emoji" style="top: 5%; left: 3%;">🩺</div>
+<div class="floating-emoji" style="bottom: 12%; right: 5%; rotate: 10deg;">💊</div>
+<div class="floating-emoji" style="top: 20%; right: 8%;">❤️‍🩹</div>
+<div class="floating-emoji" style="bottom: 25%; left: 7%;">🦋</div>
+<div class="floating-emoji" style="top: 40%; left: 15%;">✨</div>
+
+<!-- super colourful navbar with icons -->
+<nav class="navbar navbar-expand-md vivid-navbar">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-hospital-user fa-beat-fade" style="--fa-beat-fade-opacity: 0.8; --fa-beat-fade-scale: 0.9;"></i>
+        Hos•pi•tal <span style="color: #ffeb99;">Manager</span>
+        <i class="fas fa-kit-medical" style="color: #ffccff;"></i>
+    </a>
+    <div class="ml-auto">
+        <span class="text-white" style="font-weight: 500; background: #ffb347; padding: 0.4rem 1.2rem; border-radius: 60px; box-shadow: 0 0 0 3px white;">
+            <i class="fas fa-notes-medical"></i>  ER • 24/7
+        </span>
+    </div>
+</nav>
+
+<br>
+
+<div class="container mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <!-- radiant card with colourful content (no dark style at all) -->
+            <div class="radiant-card">
+                <!-- inner decoration -->
+                <div class="text-center">
+                    <span class="neon-title-colourful">
+                        <i class="fas fa-user-plus" style="color: #c44569;"></i>  Add new patient
+                    </span>
+                </div>
+
+                <!-- IMPORTANT: Thymeleaf syntax is kept as in original, but now wrapped in designful html -->
+                <form th:action="@{/patient}" th:object="${Patient}" method="post">
+
+                    <!-- patient name field with colourful icon -->
+                    <div class="form-group">
+                        <label><i class="fas fa-user-circle"></i> Patient name</label>
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="e.g. Lily Evans" />
+                        <small class="form-text" style="color:#b34180; font-weight:500;"><i class="far fa-smile-wink"></i> full name please</small>
+                    </div>
+
+                    <!-- gender with pastel dropdown -->
+                    <div class="form-group">
+                        <label><i class="fas fa-venus-mars"></i> Gender</label>
+                        <select th:field="*{gender}" class="form-control">
+                            <option value="" disabled selected>🌈 select gender</option>
+                            <option value="Male">♂️ Male</option>
+                            <option value="Female">♀️ Female</option>
+                            <option value="Other">⚧️ Other / non-binary</option>
+                        </select>
+                    </div>
+
+                    <!-- age with number input and emoji -->
+                    <div class="form-group">
+                        <label><i class="fas fa-calendar-alt"></i> Age (years)</label>
+                        <input type="number" th:field="*{age}" class="form-control" min="0" max="150" placeholder="e.g. 28" />
+                    </div>
+
+                    <!-- disease textarea with icons -->
+                    <div class="form-group">
+                        <label><i class="fas fa-disease"></i> Disease / symptoms</label>
+                        <textarea th:field="*{disease}" class="form-control" rows="3" placeholder="Describe symptoms ..."></textarea>
+                    </div>
+
+                    <!-- contact with phone icon & colourful placeholder -->
+                    <div class="form-group">
+                        <label><i class="fas fa-phone-alt"></i> Contact number</label>
+                        <input type="tel" th:field="*{contact}" class="form-control" placeholder="+1 234 567 890" />
+                    </div>
+
+                    <!-- big shiny submit button -->
+                    <button type="submit" class="btn btn-colourful">
+                        <i class="fas fa-paper-plane"></i> Register patient
+                    </button>
+
+                    <!-- extra colourful note -->
+                    <div class="text-right mt-3" style="color: #aa4a76;">
+                        <i class="fas fa-heart" style="color:#fb8da0;"></i>  we care with colour  <i class="fas fa-heart" style="color:#f4abc4;"></i>
+                    </div>
+                </form>
+                <!-- end th form -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- additional happy footer (optional) -->
+<div style="text-align: center; padding: 0.8rem; font-size: 1.2rem; color: #302b63; background: rgba(255,255,230,0.5); backdrop-filter: blur(3px); border-radius: 80px 80px 0 0; margin-top: 30px;">
+    <i class="fas fa-stethoscope"></i>  colourful hospital — brighter care  <i class="fas fa-syringe"></i>
+</div>
+
+<!-- Bootstrap + jQuery (for any optional interactivity, not required) -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

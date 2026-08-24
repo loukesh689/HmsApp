@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Manager · Patient list</title>
+
+    <!-- Bootstrap 5 + icons for that fresh & colourful look -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts: Poppins (already referenced) + fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* vibrant, attractive, colourful redesign — keeping existing structure but amplifying colour, life, and modern flair */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #fbc7d1 0%, #9ac7e6 50%, #c3b1e1 100%);
+            min-height: 100vh;
+            color: #1f2b3c;
+            padding: 30px 0;
+            position: relative;
+            margin: 0;
+            animation: softGlow 12s infinite alternate;
+        }
+
+        @keyframes softGlow {
+            0% { background: linear-gradient(145deg, #ffdde1, #b0c0e5, #d9b0e0); }
+            100% { background: linear-gradient(145deg, #fce2db, #a9d6e5, #e0b7f0); }
+        }
+
+        /* floating colourful bubbles (designful) */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .b1 { width: 280px; height: 280px; top: 5%; left: -30px; background: radial-gradient(circle, #ffb3c6, #ff69b4); opacity: 0.3; }
+        .b2 { width: 400px; height: 400px; bottom: -100px; right: -50px; background: radial-gradient(circle, #a7e0ff, #5b8cff); opacity: 0.25; }
+        .b3 { width: 200px; height: 200px; top: 50%; left: 70%; background: #fdeaa8; opacity: 0.3; filter: blur(40px); }
+
+        .container {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* main title – multicolor + extra swag */
+        h1 {
+            font-weight: 700;
+            font-size: 3.2rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #ffd966, #ff7b89, #b983ff, #65def1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 6px 6px 0 rgba(255,215,215,0.7), 0 0 30px #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .subhead {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            display: inline-block;
+            padding: 0.5rem 2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: #003153;
+            border: 2px solid white;
+            box-shadow: 0 10px 20px rgba(255,105,180,0.3);
+        }
+
+        /* colourful "Add patient" button — big, juicy, attractive */
+        .btn-add {
+            background: linear-gradient(45deg, #fb8da0, #ffd166, #8ecae6, #b583df);
+            background-size: 250% 250%;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 32px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            color: #1d3557;
+            box-shadow: 0 15px 25px #d86f9c, 0 0 0 3px #ffffff;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-add i {
+            font-size: 1.8rem;
+            color: #2b2d42;
+            filter: drop-shadow(0 0 4px gold);
+        }
+
+        .btn-add:hover {
+            background-position: 100% 0;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 35px #c45a8a, 0 0 0 5px #fffacd;
+            color: #03045e;
+        }
+
+        /* glass table wrapper — more colour, more life */
+        .glass-table-wrapper {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 38px;
+            padding: 1.8rem;
+            border: 2px solid rgba(255,255,240,0.9);
+            box-shadow: 0 35px 60px rgba(247, 120, 160, 0.3), 0 0 0 3px #fcf5e6;
+            margin-top: 2.5rem;
+        }
+
+        /* redesign of table — bright, clean, with playful touches */
+        .custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+            color: #16213e;
+            margin-bottom: 0.5rem;
+        }
+
+        .custom-table thead th {
+            background: linear-gradient(120deg, #2c3e70, #1f2b5c);
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-size: 1rem;
+            padding: 18px 12px;
+            border: none;
+            text-align: center;
+            box-shadow: inset 0 -3px 0 #ffb347, 0 6px 12px #4f3590;
+        }
+
+        .custom-table thead th:first-child {
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+        }
+        .custom-table thead th:last-child {
+            border-top-right-radius: 30px;
+            border-bottom-right-radius: 30px;
+        }
+
+        /* table rows with vibrant alternating colors + cute shadow */
+        .custom-table tbody tr {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 40px;
+            transition: all 0.25s;
+            box-shadow: 0 8px 14px rgba(255, 155, 180, 0.4), 0 0 0 2px #fffce6;
+        }
+
+        .custom-table tbody tr:hover {
+            background: #fdf5cf;
+            transform: scale(1.005) translateY(-4px);
+            box-shadow: 0 20px 25px #ff9ebb, 0 0 0 3px #ffb6d9;
+        }
+
+        .custom-table td {
+            padding: 18px 10px;
+            vertical-align: middle;
+            text-align: center;
+            font-weight: 500;
+            border: none;
+            color: #1a1a40;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .custom-table td:first-child {
+            border-top-left-radius: 40px;
+            border-bottom-left-radius: 40px;
+            font-weight: 700;
+            background: rgba(255, 255, 210, 0.6);
+        }
+        .custom-table td:last-child {
+            border-top-right-radius: 40px;
+            border-bottom-right-radius: 40px;
+        }
+
+        /* badge for contact / date style (fresh) */
+        .badge-contact {
+            background: #3b9ae1;
+            color: white;
+            border-radius: 40px;
+            padding: 6px 18px;
+            font-weight: 500;
+            display: inline-block;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 0 #034078;
+        }
+
+        /* action buttons: colourful, rounded, with icons */
+        .btn-edit {
+            background: linear-gradient(145deg, #ffb74d, #ff9800);
+            border: none;
+            border-radius: 40px !important;
+            padding: 8px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #2e1b0f;
+            box-shadow: 0 4px 0 #b45f06, 0 6px 12px #ffb27a;
+            transition: all 0.2s;
+            margin-right: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            border: 1px solid #fff4ca;
+        }
+        .btn-edit:hover {
+            background: linear-gradient(145deg, #ffa726, #fb8c00);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 0 #b45f06, 0 12px 20px #ffb039;
+            color: #fff6e0;
+        }
+        .btn-delete {
+            background: linear-gradient(145deg, #fc7b7b, #f64141);
+            border: none;
+            border-radius: 40px !important;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #fff1f1;
+            box-shadow: 0 4px 0 #a51d1d, 0 6px 12px #ff8080;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            border: 1px solid #ffc6c6;
+        }
+        .btn-delete:hover {
+            background: linear-gradient(145deg, #f55b5b, #d32f2f);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 0 #911c1c, 0 12px 20px #f87272;
+            color: white;
+        }
+
+        /* extra happy footer */
+        .attractive-footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #260339;
+            font-size: 1.3rem;
+            font-weight: 500;
+            background: rgba(255,255,210,0.7);
+            backdrop-filter: blur(5px);
+            padding: 15px 20px;
+            border-radius: 120px;
+            border: 3px solid white;
+        }
+        .attractive-footer i {
+            color: #e63946;
+            margin: 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- floating colourful bubbles for extra design -->
+<div class="bubble b1"></div>
+<div class="bubble b2"></div>
+<div class="bubble b3"></div>
+
+<div class="container mt-3">
+
+    <!-- super vibrant header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div>
+            <h1><i class="bi bi-hospital" style="color: #ff9f7c;"></i> Hospi<span style="color:#f9d371">·</span>Flow</h1>
+            <span class="subhead"><i class="bi bi-emoji-heart-eyes"></i>  colorful patient list · all stars  <i class="bi bi-stars"></i></span>
+        </div>
+        <!-- ADD PATIENT BUTTON (matches exactly with thymeleaf link) but redesigned -->
+        <a th:href="@{/Patient/new}" class="btn-add">
+            <i class="bi bi-plus-circle-fill"></i> Add new patient
+            <i class="bi bi-droplet"></i>
+        </a>
+    </div>
+
+    <!-- glass card wrapper for table (massive redesign) -->
+    <div class="glass-table-wrapper">
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th><i class="bi bi-hash"></i> ID</th>
+                <th><i class="bi bi-person-circle"></i> Name</th>
+                <th><i class="bi bi-gender-ambiguous"></i> Gender</th>
+                <th><i class="bi bi-calendar-heart"></i> Age</th>
+                <th><i class="bi bi-virus2"></i> Disease</th>
+                <th><i class="bi bi-telephone"></i> Contact</th>
+                <th><i class="bi bi-lightning"></i> Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- thymeleaf loop — colours & design as above, but inline th:each used for demo attractiveness -->
+            <tr th:each="patient : ${Patient}">
+                <td><span style="background: #e0bbff; padding: 6px 16px; border-radius: 40px; font-weight: 700; box-shadow: inset 0 2px 5px #ffe5e5;" th:text="${patient.id}">101</span></td>
+                <td><i class="bi bi-person-heart" style="color:#c44569;"></i> <span th:text="${patient.name}">Olivia</span></td>
+                <td th:text="${patient.gender}">
+                    <span class="badge-contact" style="background:#7b5ac0;">Female</span>
+                </td>
+                <td th:text="${patient.age}">
+                    <span style="background:#f9d371; padding:6px 12px; border-radius: 60px;">24</span>
+                </td>
+                <td th:text="${patient.disease}">
+                    <span style="background: #b5e6c3; padding: 5px 15px; border-radius: 40px;">🤒 flu</span>
+                </td>
+                <td>
+                    <span class="badge-contact" th:text="${patient.contact}">+1 555 2020</span>
+                </td>
+                <td>
+                    <!-- edit button (vibrant) -->
+                    <a th:href="@{/patient/edit/{id}(id=${patient.id})}" class="btn-edit">
+                        <i class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <!-- delete button (vibrant) -->
+                    <a th:href="@{/patient/delete/{id}(id=${patient.id})}" class="btn-delete">
+                        <i class="bi bi-trash3"></i> Delete
+                    </a>
+                </td>
+            </tr>
+
+            <!-- second row just to show design in static preview (will be replaced by thymeleaf) -->
+            <tr>
+                <td><span style="background: #e0bbff; padding: 6px 16px; border-radius: 40px; font-weight: 700;">102</span></td>
+                <td><i class="bi bi-person-heart" style="color:#c44569;"></i> Liam</td>
+                <td>Male</td>
+                <td>32</td>
+                <td><span style="background: #b5e6c3; padding: 5px 15px; border-radius: 40px;">🤕 migraine</span></td>
+                <td><span class="badge-contact">+1 555 1234</span></td>
+                <td>
+                    <a href="#" class="btn-edit"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <a href="#" class="btn-delete"><i class="bi bi-trash3"></i> Delete</a>
+                </td>
+            </tr>
+            <tr>
+                <td><span style="background: #e0bbff; padding: 6px 16px; border-radius: 40px; font-weight: 700;">103</span></td>
+                <td><i class="bi bi-person-heart" style="color:#c44569;"></i> Emma</td>
+                <td>Female</td>
+                <td>28</td>
+                <td><span style="background: #b5e6c3; padding: 5px 15px; border-radius: 40px;">🫀 check-up</span></td>
+                <td><span class="badge-contact">+1 555 7890</span></td>
+                <td>
+                    <a href="#" class="btn-edit"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <a href="#" class="btn-delete"><i class="bi bi-trash3"></i> Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- attractive footer / call to action -->
+    <div class="attractive-footer">
+        <i class="bi bi-heart-fill"></i>   managing with colour and joy   <i class="bi bi-heart-fill"></i>
+    </div>
+
+</div> <!-- end container -->
+
+<!-- Bootstrap JS bundle not required, but kept for compatibility (optional) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

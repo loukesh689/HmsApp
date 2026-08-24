@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital · Book Appointment</title>
+
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+
+    <!-- Font Awesome 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #00c6fb 0%, #005bea 50%, #6a11cb 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated medical background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 30%),
+                repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 2px, transparent 2px, transparent 10px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating medical icons */
+        .floating-icon {
+            position: fixed;
+            font-size: 3.5rem;
+            color: rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatAround 25s linear infinite;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+            25% { transform: translate(20px, 30px) rotate(10deg); opacity: 0.3; }
+            50% { transform: translate(40px, 0) rotate(20deg); opacity: 0.2; }
+            75% { transform: translate(20px, -30px) rotate(10deg); opacity: 0.3; }
+            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.2; }
+        }
+
+        .icon-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .icon-2 { top: 20%; right: 8%; animation-delay: 3s; }
+        .icon-3 { bottom: 15%; left: 10%; animation-delay: 6s; }
+        .icon-4 { bottom: 25%; right: 15%; animation-delay: 9s; }
+        .icon-5 { top: 50%; left: 20%; animation-delay: 12s; }
+        .icon-6 { top: 70%; right: 10%; animation-delay: 15s; }
+        .icon-7 { bottom: 30%; left: 30%; animation-delay: 18s; }
+        .icon-8 { top: 40%; right: 25%; animation-delay: 21s; }
+
+        /* Navbar - World Class Design */
+        .dark-navbar {
+            background: linear-gradient(90deg, #1e3c72 0%, #2a5298 50%, #667eea 100%);
+            padding: 1.2rem 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.2);
+            position: relative;
+            z-index: 100;
+            border-bottom: 3px solid rgba(255,215,0,0.5);
+        }
+
+        .navbar-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            color: #fff !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3), 0 0 20px #00eaff;
+            letter-spacing: 1px;
+        }
+
+        .navbar-brand i {
+            color: #ffd700;
+            filter: drop-shadow(0 0 10px gold);
+            margin: 0 10px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 30px 15px;
+        }
+
+        /* Card - Premium Design */
+        .dark-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 70px 20px 70px 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3),
+                        0 0 0 5px rgba(255,255,255,0.5),
+                        0 0 50px #00eaff,
+                        inset 0 0 30px rgba(255,255,255,0.8);
+            border: 2px solid rgba(255,255,255,0.8);
+            transform: translateY(0);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .card-body {
+            padding: 40px 40px 50px;
+            position: relative;
+        }
+
+        /* Decorative corner elements */
+        .card-body::before,
+        .card-body::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 30% 30%, rgba(0,230,255,0.3), transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .card-body::before {
+            top: -30px;
+            left: -30px;
+            background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.3), transparent 70%);
+        }
+
+        .card-body::after {
+            bottom: -30px;
+            right: -30px;
+            background: radial-gradient(circle at 30% 30%, rgba(106,17,203,0.3), transparent 70%);
+        }
+
+        /* Title */
+        .neon-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #1e3c72, #2a5298, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .neon-title i {
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0 15px;
+            font-size: 2.8rem;
+        }
+
+        .neon-title::after {
+            content: '';
+            display: block;
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, #00eaff, #9b59b6, #f1c40f);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* Form Labels */
+        .form-group label {
+            font-weight: 600;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label i {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-right: 12px;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+
+        /* Input Fields */
+        .form-control {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            padding: 15px 25px;
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 5px rgba(102,126,234,0.2), inset 0 2px 5px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+        }
+
+        select.form-control {
+            background: white url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23667eea'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1.5rem center;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+        }
+
+        select.form-control option {
+            background: white;
+            color: #333;
+            padding: 10px;
+        }
+
+        /* Date Input Styling */
+        input[type="date"] {
+            color-scheme: light;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%23667eea'><path d='M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z'/></svg>") no-repeat;
+            background-size: contain;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        /* Submit Button */
+        .btn-success {
+            background: linear-gradient(45deg, #11998e, #38ef7d, #00eaff);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 60px;
+            padding: 18px 40px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: white;
+            box-shadow: 0 20px 40px rgba(17,153,142,0.4),
+                        0 0 0 3px rgba(255,255,255,0.5),
+                        0 0 30px #00eaff;
+            transition: 0.5s;
+            width: 100%;
+            margin-top: 20px;
+            border: 2px solid rgba(255,255,255,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-success i {
+            font-size: 1.8rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+        }
+
+        .btn-success:hover {
+            background-position: 100% 0;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 30px 50px rgba(56,239,125,0.6), 0 0 0 5px rgba(255,255,255,0.8), 0 0 50px #11998e;
+        }
+
+        /* Section dividers */
+        .mb-3 {
+            margin-bottom: 25px !important;
+            position: relative;
+        }
+
+        /* Animation for form elements */
+        .form-group {
+            animation: slideUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Placeholder styling */
+        .form-control::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+
+            .card-body {
+                padding: 30px 20px;
+            }
+
+            .neon-title {
+                font-size: 2rem;
+            }
+
+            .neon-title i {
+                font-size: 2rem;
+            }
+
+            .btn-success {
+                font-size: 1.1rem;
+                padding: 15px 30px;
+            }
+
+            .floating-icon {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .neon-title {
+                font-size: 1.6rem;
+            }
+
+            .form-control {
+                padding: 12px 20px;
+            }
+
+            .btn-success i {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Selection styling */
+        ::selection {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(145deg, #1e3c72, #2a5298);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(145deg, #764ba2, #667eea);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Floating Medical Icons for Decoration -->
+<div class="floating-icon icon-1"><i class="fas fa-heartbeat"></i></div>
+<div class="floating-icon icon-2"><i class="fas fa-stethoscope"></i></div>
+<div class="floating-icon icon-3"><i class="fas fa-pills"></i></div>
+<div class="floating-icon icon-4"><i class="fas fa-syringe"></i></div>
+<div class="floating-icon icon-5"><i class="fas fa-hospital"></i></div>
+<div class="floating-icon icon-6"><i class="fas fa-ambulance"></i></div>
+<div class="floating-icon icon-7"><i class="fas fa-thermometer"></i></div>
+<div class="floating-icon icon-8"><i class="fas fa-clock"></i></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-md navbar-dark dark-navbar">
+    <a class="navbar-brand" href="#">
+        <i class="fas fa-globe-asia"></i>
+        WORLD HOSPITAL
+        <i class="fas fa-star"></i>
+    </a>
+</nav>
+
+<br>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card dark-card">
+                <div class="card-body">
+                    <h2 class="text-center neon-title">
+                        <i class="fas fa-calendar-plus"></i>
+                        Book Appointment
+                        <i class="fas fa-clock"></i>
+                    </h2>
+
+                    <form th:action="@{/appointment/save}"
+                          th:object="${appointment}"
+                          method="post">
+
+                        <!-- Appointment Date -->
+                        <div class="form-group">
+                            <label for="datePicker">
+                                <i class="fas fa-calendar-alt"></i>
+                                Appointment Date
+                            </label>
+                            <input
+                                    type="date"
+                                    id="datePicker"
+                                    class="form-control"
+                                    required
+                                    onchange="convertDateToInt()"
+                            >
+                            <input type="hidden" name="appointmentDate" id="appointmentDate">
+                        </div>
+
+                        <!-- Patient Selection -->
+                        <div class="form-group">
+                            <label for="patientId">
+                                <i class="fas fa-user"></i>
+                                Patient Name
+                            </label>
+                            <select
+                                    id="patientId"
+                                    name="patientId"
+                                    class="form-control"
+                                    required
+                            >
+                                <option value="" disabled selected>-- Select Patient --</option>
+                                <option
+                                        th:each="patient : ${patients}"
+                                        th:value="${patient.id}"
+                                        th:text="${patient.name}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Doctor Selection -->
+                        <div class="form-group">
+                            <label for="doctorId">
+                                <i class="fas fa-user-md"></i>
+                                Doctor Name
+                            </label>
+                            <select
+                                    id="doctorId"
+                                    name="doctorId"
+                                    class="form-control"
+                                    required
+                            >
+                                <option value="" disabled selected>-- Select Doctor --</option>
+                                <option
+                                        th:each="doctor : ${doctors}"
+                                        th:value="${doctor.id}"
+                                        th:text="${doctor.name}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-success shadow">
+                            <i class="fas fa-check-circle"></i>
+                            Confirm Appointment
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for date conversion -->
+<script>
+    function convertDateToInt() {
+        const datePicker = document.getElementById('datePicker');
+        const hiddenInput = document.getElementById('appointmentDate');
+
+        if (datePicker.value) {
+            const date = new Date(datePicker.value);
+            const timestamp = date.getTime();
+            hiddenInput.value = timestamp;
+            console.log('Date converted to timestamp:', timestamp);
+        }
+    }
+
+    // Add animation to select fields
+    document.querySelectorAll('select').forEach(select => {
+        select.addEventListener('change', function() {
+            this.style.backgroundColor = '#f0f9ff';
+            setTimeout(() => {
+                this.style.backgroundColor = 'white';
+            }, 200);
+        });
+    });
+
+    // Auto-hide floating icons on small screens
+    if (window.innerWidth < 768) {
+        document.querySelectorAll('.floating-icon').forEach(icon => {
+            icon.style.display = 'none';
+        });
+    }
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
